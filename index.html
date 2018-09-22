@@ -29,7 +29,7 @@
 										<br />
 										<input type="submit" class="btn btn-primary" value="Login" />
 									</div>
-								</form>
+							</form>
 
 					</div>
 				</div>
@@ -61,7 +61,12 @@
 					var socket = io.connect();
 					var $messageForm = $('#messageForm');
 					var $message = $('#message');
-					var $chat = $('#chat')
+					var $chat = $('#chat');
+					var $messageArea = $('#messageArea');
+					var $userformArea = $('#userformArea');
+					var $userform = $('#userform');
+					var $users = $('#users');
+					var $username = $('#username');
 
 					//create event for when message is submited
 					$messageForm.submit(function(e){
@@ -73,6 +78,27 @@
 
 					socket.on('new message', function(data){
 						$chat.append('<div class="well">'+data.msg+'</div>')
+					});
+
+					//create event for user
+					$userform.submit(function(e){
+						e.preventDefault();
+						// console.log('submitted');
+						socket.emit('new user', $username.val(), function(data){
+							if(data){
+								$userformArea.hide();
+								$messageArea.show();
+							}
+						});
+						$username.val('');
+					});
+
+					socket.on('get users', function(data){
+						var html = '';
+						for( i = 0; i<data.length; i++) {
+							html += '<li class="list-group-item">' + data[i] +'</li>'
+						}
+						$users.html(html)
 					})
 				});
 
