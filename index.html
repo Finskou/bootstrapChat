@@ -27,7 +27,7 @@
 					<div class="col-md-8">
 						<div class="chat" id="chat"></div>
 
-						<form id="messageform">
+						<form id="messageForm">
 							<div class="form-group">
 								<label> Enter Message </label>
 								<textarea class="form-control" id="message"></textarea>
@@ -49,11 +49,16 @@
 					//create event for when message is submited
 					$messageForm.submit(function(e){
 						e.preventDefault();
-						sockte.emit('send message', $message.val());
+						// console.log('submitted');
+						socket.emit('send message', $message.val());
 						$message.val('');
+					});
+
+					socket.on('new message', function(data){
+						$chat.append('<div class="well">'+data.msg+'</div>')
 					})
 				});
-				
+
 
 			</script>
 		</body>
